@@ -1,54 +1,41 @@
 package app.inventario.view;
 
 import javax.swing.*;
-import java.awt.*;
 
 public class TelaMenuPrincipal {
-    private JPanel mainPanel;
-    private JLabel txtTitulo;
-    private JButton btnJogar;
-    private JButton btnSair;
+    public JPanel mainPanel;
+    public JButton btnJogar;
+    public JButton btnSair;
+    public JLabel txtTitulo;
 
     public TelaMenuPrincipal() {
-        // Carrega imagem do classpath (dentro de resources/images)
-        ImageIcon backgroundIcon = new ImageIcon(
-                getClass().getResource("/images/catacombs_store.jpeg")
-        );
-        Image backgroundImage = backgroundIcon.getImage();
+        // Ao clicar em "Jogar" abre a TelaInventarioGUI
+        btnJogar.addActionListener(e -> {
+            JFrame frame = new JFrame("Inventário");
+            TelaInventarioGUI telaInventario = new TelaInventarioGUI();
+            frame.setContentPane(telaInventario.getMainPanel());
+            frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+            frame.pack();
+            frame.setLocationRelativeTo(null); // centralizar
+            frame.setVisible(true);
+        });
 
-        // Painel com fundo
-        JPanel backgroundPanel = new JPanel() {
-            @Override
-            protected void paintComponent(Graphics g) {
-                super.paintComponent(g);
-                g.drawImage(backgroundImage, 0, 0, getWidth(), getHeight(), this);
-            }
-        };
-        backgroundPanel.setLayout(new GridBagLayout());
-
-        // Define a fonte "Ink Free" Bold Italic para os botões
-        Font inkFreeFont = new Font("Ink Free", Font.BOLD | Font.ITALIC, 20);
-        if (btnJogar != null) btnJogar.setFont(inkFreeFont);
-        if (btnSair != null) btnSair.setFont(inkFreeFont);
-
-        // Adiciona o painel do .form por cima da imagem
-        backgroundPanel.add(mainPanel);
-
-        // Substitui referência
-        this.mainPanel = backgroundPanel;
+        // Ao clicar em "Sair"
+        btnSair.addActionListener(e -> System.exit(0));
     }
 
     public JPanel getMainPanel() {
         return mainPanel;
     }
 
-    // Teste rápido
-    public static void main(String[] args) {
+    public void showWindow() {
         JFrame frame = new JFrame("Catacombs Store");
-        frame.setContentPane(new TelaMenuPrincipal().getMainPanel());
+        frame.setContentPane(mainPanel);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        frame.setSize(800, 600);
-        frame.setLocationRelativeTo(null);
+        frame.pack();
+        frame.setLocationRelativeTo(null); // centralizar
         frame.setVisible(true);
     }
+
 }
+
