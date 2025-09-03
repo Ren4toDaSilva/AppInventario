@@ -37,13 +37,6 @@ public class TelaMenuPrincipal {
         frame.setVisible(true);
     }
 
-    // Método main para iniciar o programa
-    public static void main(String[] args) {
-        SwingUtilities.invokeLater(() -> {
-            TelaMenuPrincipal tela = new TelaMenuPrincipal();
-            tela.showWindow();
-        });
-    }
 }
 
 

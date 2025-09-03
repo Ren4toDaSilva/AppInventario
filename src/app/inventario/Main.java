@@ -1,19 +1,15 @@
 package app.inventario;
 
 import app.inventario.view.TelaInventarioGUI;
+import app.inventario.view.TelaMenuPrincipal;
 
 import javax.swing.*;
 
 public class Main {
     public static void main(String[] args) {
         SwingUtilities.invokeLater(() -> {
-            JFrame frame = new JFrame("Inventário - CRUD");
-            frame.setContentPane(new TelaInventarioGUI().getMainPanel());
-            frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-            frame.pack();
-            frame.setLocationRelativeTo(null);
-            frame.setVisible(true);
+            TelaMenuPrincipal tela = new TelaMenuPrincipal();
+            tela.showWindow();
         });
-
     }
 }

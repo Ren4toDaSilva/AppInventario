@@ -1,22 +1,21 @@
 package app.inventario.view;
 
-import app.inventario.model.Inventario;
+import app.inventario.dao.ProdutoDAO;
 import app.inventario.model.Produto;
 
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 
 public class TelaInventarioGUI {
-    private JPanel mainPanel;
-    private JTable tabelaProdutos;
-    private JButton btnAdicionar;
-    private JButton btnEditar;
-    private JButton btnRemover;
+    public JPanel mainPanel;
+    public JTable tabelaProdutos;
+    public JButton btnAdicionar;
+    public JButton btnEditar;
+    public JButton btnRemover;
 
-    private Inventario inventario = new Inventario();
-    private DefaultTableModel modelo;
+    public DefaultTableModel modelo;
 
-    // Construtor correto (antes estava "void")
+    // Construtor
     public TelaInventarioGUI() {
         modelo = new DefaultTableModel(new Object[]{"ID", "Nome", "Quantidade"}, 0);
         tabelaProdutos.setModel(modelo);
@@ -25,7 +24,21 @@ public class TelaInventarioGUI {
         btnEditar.addActionListener(e -> editarProduto());
         btnRemover.addActionListener(e -> removerProduto());
 
-        atualizarTabela();
+        // Puxa os dados salvos do banco ao abrir
+        carregarProdutos();
+    }
+
+    // Puxa os dados do banco e joga na tabela
+    private void carregarProdutos() {
+        modelo.setRowCount(0); // limpa a tabela
+
+        for (Produto p : ProdutoDAO.listar()) {
+            modelo.addRow(new Object[]{
+                    p.getId(),
+                    p.getNome(),
+                    p.getQuantidade()
+            });
+        }
     }
 
     private void abrirFormulario(Produto produtoExistente) {
@@ -46,11 +59,11 @@ public class TelaInventarioGUI {
                 int qtd = Integer.parseInt(txtQtd.getText());
 
                 if (produtoExistente == null) {
-                    inventario.adicionarProduto(nome, qtd);
+                    ProdutoDAO.adicionar(nome, qtd);
                 } else {
-                    inventario.editarProduto(produtoExistente.getId(), nome, qtd);
+                    ProdutoDAO.atualizar(produtoExistente.getId(), nome, qtd);
                 }
-                atualizarTabela();
+                carregarProdutos(); // atualiza tabela com dados do banco
             } catch (NumberFormatException ex) {
                 JOptionPane.showMessageDialog(null, "Quantidade inválida!");
             }
@@ -73,17 +86,10 @@ public class TelaInventarioGUI {
         int linha = tabelaProdutos.getSelectedRow();
         if (linha != -1) {
             int id = (int) modelo.getValueAt(linha, 0);
-            inventario.removerProduto(id);
-            atualizarTabela();
+            ProdutoDAO.remover(id);
+            carregarProdutos(); // recarrega após remover
         } else {
             JOptionPane.showMessageDialog(null, "Selecione um produto para remover!");
-        }
-    }
-
-    private void atualizarTabela() {
-        modelo.setRowCount(0);
-        for (Produto p : inventario.listarProdutos()) {
-            modelo.addRow(new Object[]{p.getId(), p.getNome(), p.getQuantidade()});
         }
     }
 
