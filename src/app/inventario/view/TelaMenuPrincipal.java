@@ -39,3 +39,7 @@ public class TelaMenuPrincipal {
 
 }
 
+<<<<<<< HEAD
+=======
+
+>>>>>>> a95db8c132564c6592acfe8b54cda0f6388ffd5c
